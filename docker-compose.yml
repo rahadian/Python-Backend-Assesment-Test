@@ -1,0 +1,26 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=arya123
+      - POSTGRES_DB=tabungan
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/var/www/backend
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+    db-data:
